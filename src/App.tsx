@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+import { Web3Connector } from './components/Web3Connector';
+import Web3WalletButton from './components/Web3WalletButton';
+
 function App() {
+  const [web3Connector, setWeb3Connector] = useState<Web3Connector>();
+
+  // Web3Modal initializer
+  useEffect(() => {
+    ;(async function iife() {
+      const web3Connector = new Web3Connector();
+      web3Connector.init();
+      setWeb3Connector(web3Connector);
+    })()
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Web3WalletButton web3Connector={web3Connector} />
     </div>
   );
 }

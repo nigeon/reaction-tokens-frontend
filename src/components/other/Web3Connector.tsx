@@ -7,11 +7,10 @@ export class Web3Connector {
     public web3Provider: any;
 
     async init() {
-        const providerOptions = {
-        };
+        const providerOptions = {};
 
         this.web3Modal = new Web3Modal({
-            cacheProvider: false, // optional
+            cacheProvider: true, // optional
             providerOptions // required
         });
 

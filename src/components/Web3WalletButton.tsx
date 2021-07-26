@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 
 export default function Web3WalletButton(props: any) {  
@@ -54,8 +55,6 @@ export default function Web3WalletButton(props: any) {
 
   const buttonText = (web3Connected) ? 'Disconnect Wallet':'Connect Wallet';
   return (
-    <button type="button" 
-      disabled={web3Connecting} 
-      onClick={buttonOnClick}>{buttonText}</button>
+    <Button type="primary" disabled={web3Connecting} onClick={buttonOnClick}>{buttonText}</Button>
   );
 }

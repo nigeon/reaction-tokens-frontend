@@ -10,7 +10,7 @@ import ReactionButton, { IReactionSettings } from './components/ReactionButton';
 
 function App() {
   const [web3Connector, setWeb3Connector] = useState<Web3Connector>();
-  const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', nft: '', amount: 0});
+  const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', nft: '', amount: 0, reactionTokenName: '', reactionTokenSymbol: '', tokenMetadataURI: ''});
 
   // Web3Modal initializer
   useEffect(() => {
@@ -35,8 +35,15 @@ function App() {
           <Col flex="auto">
             <h2>Reaction Settings</h2>
             <Form
+              initialValues={{
+                nft: "0x7c333356e6a0a1644f1307da00348aaffe5bbfa5",
+                erc20: "0x4ae5d467a0d75ee5c89c92a2c2a09fff1676e0ce",
+                amount: 100,
+                reactionTokenName: 'Like', 
+                reactionTokenSymbol: "LIKE", 
+                tokenMetadataURI:"https://gateway.pinata.cloud/ipfs/QmbVsqnwUrDJBBdbr1wjC4FZNKdN5i2jQoBJyGoea5bYy9"
+              }}
               name="basic"
-              initialValues={{ remember: true }}
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 16 }}
               onFinish={onFinish}
@@ -65,6 +72,18 @@ function App() {
                 <Input />
               </Form.Item>
 
+              <Form.Item style={{display:"none"}} name="reactionTokenName">
+                <Input />
+              </Form.Item>
+
+              <Form.Item style={{display:"none"}} name="reactionTokenSymbol">
+                <Input />
+              </Form.Item>
+
+              <Form.Item style={{display:"none"}} name="tokenMetadataURI">
+                <Input />
+              </Form.Item>
+
               <Form.Item style={{textAlign:"left"}} wrapperCol={{ offset: 6, span: 16 }}>
                 <Button type="primary" htmlType="submit">
                   Set
@@ -76,7 +95,9 @@ function App() {
         
         <Row>
           <Col>
-            <ReactionButton settings={reactionProps} />
+            { web3Connector &&
+              <ReactionButton web3Connector={web3Connector} settings={reactionProps} />
+            }
           </Col>
         </Row>
       </Content>

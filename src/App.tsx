@@ -36,8 +36,8 @@ function App() {
             <h2>Reaction Settings</h2>
             <Form
               initialValues={{
-                nft: "0x7c333356e6a0a1644f1307da00348aaffe5bbfa5",
-                erc20: "0x4ae5d467a0d75ee5c89c92a2c2a09fff1676e0ce",
+                nft: "0x6044886e738F944D36a881F02a7D052407802a78",
+                erc20: "0x4424bF269E2038eE30A3BC37B3ec14FE61dFeaFf",
                 amount: 100,
                 reactionTokenName: 'Like', 
                 reactionTokenSymbol: "LIKE", 

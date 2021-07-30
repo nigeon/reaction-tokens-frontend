@@ -16,7 +16,7 @@ function App() {
   const [web3Connector, setWeb3Connector] = useState<Web3Connector>();
   const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', nft: '', amount: 0, reactionTokenName: '', reactionTokenSymbol: '', tokenMetadataURI: ''});
   const [userErc20Balance, setUserErc20Balance] = useState('');
-  const [nftErc20Balance, setNftErc20Balance] = useState('');
+  const [nftReactionBalance, setNftReactionBalance] = useState('');
 
   useEffect(() => {
     ;(async function iife() {
@@ -29,7 +29,11 @@ function App() {
       const userAddress = await signer.getAddress();
       const erc20Contract: Contract = new ethers.Contract(formValues.erc20, erc20ABI, signer);
       setUserErc20Balance(ethers.utils.formatEther(await erc20Contract.balanceOf(userAddress)));
-      setNftErc20Balance(ethers.utils.formatEther(await erc20Contract.balanceOf(formValues.nft)));
+
+      if(formValues.reactionContractAddr){
+        const reactionContract: Contract = new ethers.Contract(formValues.reactionContractAddr, erc20ABI, signer);
+        setNftReactionBalance(ethers.utils.formatEther(await reactionContract.balanceOf(formValues.nft)));
+      }
     })()
   }, [form]);
 
@@ -66,7 +70,7 @@ function App() {
                 label="NFT Address"
                 name="nft"
                 rules={[{ required: true, message: 'Please input the NFT Address you are going to react' }]}
-                help={`Current Balance: ${nftErc20Balance}`}
+                help={`Current Balance: ${nftReactionBalance}`}
               >
                 <Input />
               </Form.Item>

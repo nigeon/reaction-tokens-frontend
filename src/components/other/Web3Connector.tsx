@@ -15,7 +15,7 @@ export class Web3Connector {
         });
 
         if(this.web3Modal && this.web3Modal.cachedProvider){
-            this.connect();
+            await this.connect();
         }
     }
 

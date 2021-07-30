@@ -80,11 +80,11 @@ export default function ReactionButton(props: IReactionProps) {
 
     await reactionTokenContract.stakeAndMint(stakingAmount.toString(), erc20ContractAddr, nftAddr);
     reactionTokenContract.once("Staked", async (author, amount, stakingTokenAddress, stakingSuperTokenAddress) => {
-      console.log('Successfully Staked: ', author, amount, stakingTokenAddress, stakingSuperTokenAddress);
+      console.log('Successfully Staked: ', author, amount.toString(), stakingTokenAddress, stakingSuperTokenAddress);
     });
   }
 
   return (
-    <Button type="ghost" onClick={buttonOnClick}>💩</Button>
+    <Button type="primary" onClick={buttonOnClick}>React!</Button>
   );
 }

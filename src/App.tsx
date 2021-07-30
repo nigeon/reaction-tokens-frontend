@@ -17,29 +17,50 @@ function App() {
   const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', nft: '', amount: 0, reactionTokenName: '', reactionTokenSymbol: '', tokenMetadataURI: ''});
   const [userErc20Balance, setUserErc20Balance] = useState('');
   const [nftReactionBalance, setNftReactionBalance] = useState('');
+  const [userSuperTokenBalance, setUserSuperTokenBalance] = useState('');
 
   useEffect(() => {
     ;(async function iife() {
       const web3Connector = new Web3Connector();
       await web3Connector.init();
       setWeb3Connector(web3Connector);
+      onChange();
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [web3Connector, form]);
 
+  const onChange = async () => {
+    if(!web3Connector) return;
+
+    try{
       const formValues = form.getFieldsValue();
+      setReactionProps(formValues);
       const signer = await web3Connector.web3Provider.getSigner();
       const userAddress = await signer.getAddress();
       const erc20Contract: Contract = new ethers.Contract(formValues.erc20, erc20ABI, signer);
       setUserErc20Balance(ethers.utils.formatEther(await erc20Contract.balanceOf(userAddress)));
-
+  
       if(formValues.reactionContractAddr){
         const reactionContract: Contract = new ethers.Contract(formValues.reactionContractAddr, erc20ABI, signer);
         setNftReactionBalance(ethers.utils.formatEther(await reactionContract.balanceOf(formValues.nft)));
       }
-    })()
-  }, [form]);
+    }catch(e){
+      console.log(e);
+    }
+  }
 
-  const onFinish = (values: any) => {
-    setReactionProps(values);
-  };
+  const checkSuperTokenBalance = async (values: any) => {
+    if(!web3Connector) return;
+
+    const signer = await web3Connector.web3Provider.getSigner();
+    const userAddress = await signer.getAddress();
+    const supertTokenContract: Contract = new ethers.Contract(values.supertoken, erc20ABI, signer);
+
+    setInterval(async () => {
+      console.log('Checking the supertokenBalance...');
+      setUserSuperTokenBalance(ethers.utils.formatEther(await supertTokenContract.balanceOf(userAddress)));
+    }, 1000);
+  }
 
   return (
     <Layout>
@@ -53,9 +74,9 @@ function App() {
             <Form
               form={form}
               initialValues={{
-                nft: "0x6044886e738F944D36a881F02a7D052407802a78",
-                erc20: "0x4424bF269E2038eE30A3BC37B3ec14FE61dFeaFf",
-                reactionContractAddr: "0xFe5D9d3f1B4b631a8bEE73381bb7056a9a4a6C54",
+                nft: "0xa94E2Ba2c4892F9E6895AE075d146BC0f339Ab11",
+                erc20: "0xae24B6DcE7a565200bC05394F87eF8c32ba573ae",
+                // reactionContractAddr: "",
                 amount: 100,
                 reactionTokenName: 'Like', 
                 reactionTokenSymbol: "LIKE", 
@@ -64,7 +85,7 @@ function App() {
               name="basic"
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 16 }}
-              onFinish={onFinish}
+              onChange={onChange}
             >
               <Form.Item
                 label="NFT Address"
@@ -92,7 +113,9 @@ function App() {
                 <Input />
               </Form.Item>
 
-              <Form.Item style={{display:"none"}} name="reactionContractAddr">
+              <Form.Item 
+                label="Reaction Contract Address"
+                name="reactionContractAddr">
                 <Input />
               </Form.Item>
 
@@ -109,19 +132,39 @@ function App() {
               </Form.Item>
 
               <Form.Item style={{textAlign:"left"}} wrapperCol={{ offset: 6, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                  Set
-                </Button>
+                { web3Connector &&
+                  <ReactionButton web3Connector={web3Connector} settings={reactionProps} />
+                }
               </Form.Item>
             </Form>
           </Col>
         </Row>
         
         <Row>
-          <Col>
-            { web3Connector &&
-              <ReactionButton web3Connector={web3Connector} settings={reactionProps} />
-            }
+          <Col flex="auto">
+            <h2>SuperToken Balance</h2>
+            <Form
+                name="stCheck"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 16 }}
+                onFinish={checkSuperTokenBalance}
+            >
+              <Form.Item
+                label="SuperToken Address"
+                name="supertoken"
+                rules={[{ required: true, message: 'Please input the SuperToken Address' }]}
+                help={`Current Balance: ${userSuperTokenBalance}`}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item style={{textAlign:"left"}} wrapperCol={{ offset: 6, span: 16 }}>
+                <Button type="default" htmlType="submit">
+                  Check
+                </Button>
+              </Form.Item>
+
+            </Form>
           </Col>
         </Row>
       </Content>

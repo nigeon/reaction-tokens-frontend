@@ -12,6 +12,7 @@ export default function Web3WalletButton(props: any) {
     if(web3Connector && web3Connector.web3Modal && web3Connector.web3Modal.cachedProvider){
       loadWeb3Modal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connector]);
 
   // Show web3Modal

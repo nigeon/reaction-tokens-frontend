@@ -74,8 +74,8 @@ function App() {
             <Form
               form={form}
               initialValues={{
-                nft: "0xa94E2Ba2c4892F9E6895AE075d146BC0f339Ab11",
-                erc20: "0xae24B6DcE7a565200bC05394F87eF8c32ba573ae",
+                nft: "0x379CF8cd0eDcac8Bd3CEd92a0C6280C40C2af860",
+                erc20: "0xE2Ee5F719A12A85dC7cdEB04fAD3EBC0fFe185de",
                 // reactionContractAddr: "",
                 amount: 100,
                 reactionTokenName: 'Like', 

@@ -14,9 +14,9 @@ function App() {
   const [form] = Form.useForm()
 
   const [web3Connector, setWeb3Connector] = useState<Web3Connector>();
-  const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', nft: '', amount: 0, reactionTokenName: '', reactionTokenSymbol: '', tokenMetadataURI: ''});
+  const [reactionProps, setReactionProps] = useState<IReactionSettings>({ erc20: '', recipient: '', amount: 0, reactionTokenName: '', reactionTokenSymbol: '', tokenMetadataURI: ''});
   const [userErc20Balance, setUserErc20Balance] = useState('');
-  const [nftReactionBalance, setNftReactionBalance] = useState('');
+  const [recipientReactionBalance, setRecipientReactionBalance] = useState('');
   const [userSuperTokenBalance, setUserSuperTokenBalance] = useState('');
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
   
       if(formValues.reactionContractAddr){
         const reactionContract: Contract = new ethers.Contract(formValues.reactionContractAddr, erc20ABI, signer);
-        setNftReactionBalance(ethers.utils.formatEther(await reactionContract.balanceOf(formValues.nft)));
+        setRecipientReactionBalance(ethers.utils.formatEther(await reactionContract.balanceOf(formValues.recipient)));
       }
     }catch(e){
       console.log(e);
@@ -74,9 +74,10 @@ function App() {
             <Form
               form={form}
               initialValues={{
-                nft: "0x379CF8cd0eDcac8Bd3CEd92a0C6280C40C2af860",
+                recipient: "0x379CF8cd0eDcac8Bd3CEd92a0C6280C40C2af860",
                 erc20: "0xE2Ee5F719A12A85dC7cdEB04fAD3EBC0fFe185de",
                 // reactionContractAddr: "",
+                stakingTokenAddress: "0xE2Ee5F719A12A85dC7cdEB04fAD3EBC0fFe185de",
                 amount: 100,
                 reactionTokenName: 'Like', 
                 reactionTokenSymbol: "LIKE", 
@@ -88,10 +89,10 @@ function App() {
               onChange={onChange}
             >
               <Form.Item
-                label="NFT Address"
-                name="nft"
-                rules={[{ required: true, message: 'Please input the NFT Address you are going to react' }]}
-                help={`Current Balance: ${nftReactionBalance}`}
+                label="Recipient Address"
+                name="recipient"
+                rules={[{ required: true, message: 'Please input the Recipient Address you are going to react' }]}
+                help={`Current Balance: ${recipientReactionBalance}`}
               >
                 <Input />
               </Form.Item>
@@ -101,6 +102,13 @@ function App() {
                 name="erc20"
                 rules={[{ required: true, message: 'Please input the ERC20 address you are going to Stake' }]}
                 help={`Current Balance: ${userErc20Balance}`}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                label="Reaction Definition Staking ERC20"
+                name="stakingTokenAddress"
               >
                 <Input />
               </Form.Item>

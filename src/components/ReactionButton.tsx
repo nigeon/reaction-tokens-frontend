@@ -12,12 +12,13 @@ export interface IReactionProps {
 
 export interface IReactionSettings {
     erc20: string
-    nft: string
+    recipient: string
     amount: number
     reactionTokenName?: string
     reactionTokenSymbol?: string
     tokenMetadataURI?: string
     reactionContractAddr?: string
+    stakingTokenAddress?: string
 }
 
 export default function ReactionButton(props: IReactionProps) {  
@@ -34,8 +35,8 @@ export default function ReactionButton(props: IReactionProps) {
         const contractFactoryAddress: string = process.env.REACT_APP_REACTION_FACTORY || "";
         const signer = await web3Connector.web3Provider.getSigner();
         const reactionFactoryContract: Contract = new ethers.Contract(contractFactoryAddress, reactionFactoryABI, signer);
-        await reactionFactoryContract.deployReaction(settings.reactionTokenName, settings.reactionTokenSymbol, settings.tokenMetadataURI);
-        reactionFactoryContract.once("ReactionDeployed", async (sender, reactionContractAddr, reactionTokenName, reactionTokenSymbol, tokenMetadataURI) => {
+        await reactionFactoryContract.deployReaction(settings.reactionTokenName, settings.reactionTokenSymbol, settings.tokenMetadataURI, settings.stakingTokenAddress);
+        reactionFactoryContract.once("ReactionDeployed", async (sender, reactionContractAddr, reactionTokenName, reactionTokenSymbol, tokenMetadataURI, stakingTokenAddress) => {
           console.log('New reaction deployed at: ', reactionContractAddr);
           checkAllowance(settings.erc20, reactionContractAddr);
         });
@@ -65,20 +66,20 @@ export default function ReactionButton(props: IReactionProps) {
       await erc20Contract.approve(reactionContractAddr, stakingAmount);
       erc20Contract.once("Approval", async (owner, spender, amount) => {
         console.log('%s Tokens Approved', amount.toString());
-        stakeAndMint(reactionContractAddr, stakingAmount, erc20Contract.address, settings.nft);
+        stakeAndMint(reactionContractAddr, stakingAmount, erc20Contract.address, settings.recipient);
       });
     }else{
-      stakeAndMint(reactionContractAddr, stakingAmount, erc20Contract.address, settings.nft);
+      stakeAndMint(reactionContractAddr, stakingAmount, erc20Contract.address, settings.recipient);
     }
   }
 
-  const stakeAndMint = async (reactionContractAddr: string, stakingAmount: BigNumber, erc20ContractAddr: string, nftAddr: string) => {
+  const stakeAndMint = async (reactionContractAddr: string, stakingAmount: BigNumber, erc20ContractAddr: string, recipientAddr: string) => {
     const signer = await web3Connector.web3Provider.getSigner();
     const reactionTokenContract: Contract = new ethers.Contract(reactionContractAddr, reactionTokenABI, signer);
 
-    console.log('Stake and minting: ', stakingAmount.toString(), erc20ContractAddr, nftAddr);
+    console.log('Stake and minting: ', stakingAmount.toString(), erc20ContractAddr, recipientAddr);
 
-    await reactionTokenContract.stakeAndMint(stakingAmount.toString(), erc20ContractAddr, nftAddr);
+    await reactionTokenContract.stakeAndMint(stakingAmount.toString(), erc20ContractAddr, recipientAddr);
     reactionTokenContract.once("Staked", async (author, amount, stakingTokenAddress, stakingSuperTokenAddress) => {
       console.log('Successfully Staked: ', author, amount.toString(), stakingTokenAddress, stakingSuperTokenAddress);
     });

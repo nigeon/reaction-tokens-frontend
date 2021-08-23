@@ -8,17 +8,17 @@
       },
       {
         "internalType": "address",
-        "name": "host",
+        "name": "sfHost",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "cfa",
+        "name": "sfCfa",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "superTokenFactory",
+        "name": "stakingTokenAddress",
         "type": "address"
       },
       {
@@ -71,14 +71,57 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "flow",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "stakingTokenAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "stakingSuperTokenAddress",
+        "type": "address"
+      }
+    ],
+    "name": "Flowed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "author",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "address",
-        "name": "nftAddress",
+        "name": "reactionRecipientAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       },
       {
         "indexed": false,
@@ -127,12 +170,6 @@
         "indexed": false,
         "internalType": "address",
         "name": "stakingTokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "stakingSuperTokenAddress",
         "type": "address"
       }
     ],
@@ -270,6 +307,19 @@
   },
   {
     "inputs": [],
+    "name": "getStakingTokenAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getTokenMetadataURI",
     "outputs": [
       {
@@ -332,8 +382,13 @@
       },
       {
         "internalType": "address",
-        "name": "nftAddress",
+        "name": "reactionRecipientAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       }
     ],
     "name": "stakeAndMint",

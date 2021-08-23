@@ -100,6 +100,12 @@
         "internalType": "string",
         "name": "tokenMetadataURI",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "stakingTokenAddress",
+        "type": "address"
       }
     ],
     "name": "ReactionDeployed",
@@ -153,9 +159,38 @@
         "internalType": "string",
         "name": "tokenMetadataURI",
         "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "stakingTokenAddress",
+        "type": "address"
       }
     ],
     "name": "deployReaction",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "getStakedFlow",
     "outputs": [
       {
         "internalType": "address",
